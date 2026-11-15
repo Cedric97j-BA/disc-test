@@ -1,0 +1,2358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>DISC Leadership — Test de Personnalité aux 4 Couleurs</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.28s ease-out both;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-slate-900 selection:text-white">
+
+  <!-- ========================================================= -->
+  <!-- STICKY HEADER (Optimized for iPhone, iPad & Laptop)        -->
+  <!-- ========================================================= -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+      <!-- Brand Logo + Title -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="grid grid-cols-2 gap-0.5 w-7 h-7 p-1 bg-slate-900 rounded-xl shrink-0 shadow-inner">
+          <span class="bg-blue-500 rounded-sm"></span>
+          <span class="bg-red-500 rounded-sm"></span>
+          <span class="bg-green-500 rounded-sm"></span>
+          <span class="bg-amber-400 rounded-sm"></span>
+        </div>
+        <div class="truncate">
+          <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-slate-900 truncate">
+            DISC Leadership
+          </h1>
+          <p id="sync-status-badge" class="text-[10px] font-semibold text-emerald-600 flex items-center gap-1 truncate">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="sync-status-text">Synchronisation en direct</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Pills + Language Toggle + Share/Embed Helper -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div class="inline-flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/70">
+          <button
+            id="tab-btn-quiz"
+            onclick="window.app.switchMainTab('quiz')"
+            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm"
+          >
+            <span id="nav-quiz-label">Questionnaire</span>
+          </button>
+          <button
+            id="tab-btn-team"
+            onclick="window.app.switchMainTab('team')"
+            class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5"
+          >
+            <span id="nav-team-label">Équipe</span>
+            <span id="nav-team-count" class="px-1.5 py-0.2 bg-slate-900 text-white text-[10px] font-extrabold rounded-full">0</span>
+          </button>
+        </div>
+
+        <!-- FR / EN Toggle -->
+        <div class="inline-flex border border-slate-200 rounded-xl p-0.5 bg-white">
+          <button
+            id="lang-btn-fr"
+            onclick="window.app.setLanguage('fr')"
+            class="px-2 py-1 rounded-lg text-xs font-extrabold transition-all bg-slate-900 text-white"
+          >
+            FR
+          </button>
+          <button
+            id="lang-btn-en"
+            onclick="window.app.setLanguage('en')"
+            class="px-2 py-1 rounded-lg text-xs font-extrabold transition-all text-slate-500 hover:text-slate-900"
+          >
+            EN
+          </button>
+        </div>
+
+<!-- Share button removed (kept hidden on purpose)
+        <button
+          onclick="window.app.openShareModal()"
+          title="Partager / Intégrer sur Google Sites"
+          class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+        </button>
+-->
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- MAIN DYNAMIC CONTAINER                                     -->
+  <!-- ========================================================= -->
+  <main id="app-root" class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6"></main>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 1: INSPECT MEMBER PROFILE                           -->
+  <!-- ========================================================= -->
+  <div id="member-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-4 sm:p-6 shadow-xl space-y-4 max-h-[92vh] overflow-y-auto animate-fade-in">
+      <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+        <div>
+          <h3 id="modal-member-name" class="text-lg sm:text-xl font-extrabold text-slate-900"></h3>
+          <p id="modal-member-subtitle" class="text-xs text-slate-500"></p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="modal-member-excel-btn"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
+          >
+            <span>Excel (Q1–Q25)</span>
+          </button>
+          <button
+            onclick="window.app.closeMemberModal()"
+            class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="modal-member-body"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 2: GOOGLE SITES EMBED & LIVE SYNC INSTRUCTIONS      -->
+  <!-- ========================================================= --><!--
+  <div id="share-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-xl space-y-4 max-h-[92vh] overflow-y-auto animate-fade-in">
+      
+      <div class="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+        <div>
+          <h3 id="share-modal-title" class="text-lg font-extrabold text-slate-900">
+            Comment partager ce test avec votre équipe ?
+          </h3>
+          <p id="share-modal-sub" class="text-xs text-slate-500">
+            2 façons simples pour que tout le monde réponde sur son téléphone ou ordinateur
+          </p>
+        </div>
+        <button
+          onclick="window.app.closeShareModal()"
+          class="p-1.5 rounded-full hover:bg-slate-100 text-slate-500"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div> 
+
+      <div class="space-y-4 text-xs sm:text-sm text-slate-700">
+         Option A: Google Sites Embed Code 
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div class="font-extrabold text-slate-900 flex items-center justify-between">
+            <span>Option 1 : Mettre sur Google Sites (Recommandé)</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">100% Compatible</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1 text-xs text-slate-600 leading-relaxed">
+            <li>Cliquez sur le bouton <strong>« Copier tout le code HTML »</strong> ci-dessous.</li>
+            <li>Ouvrez votre page <strong>Google Sites</strong>, cliquez sur <strong>Intégrer (Embed)</strong> dans le menu de droite.</li>
+            <li>Choisissez l'onglet <strong>Intégrer le code (Embed code)</strong> (et non "Par URL"), collez le code, puis cliquez sur <strong>Suivant → Insérer</strong>.</li>
+            <li>Publiez votre Google Site et envoyez le lien à votre équipe !</li>
+          </ol>
+          <button
+            onclick="window.app.copyFullHtmlForGoogleSites()"
+            id="copy-html-btn"
+            class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all"
+          >
+            <span>Copier tout le code HTML pour Google Sites</span>
+          </button>
+        </div>
+
+         Option B: Connect a Google Sheet for External Sync 
+        <div class="p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-2.5">
+          <div class="font-extrabold text-slate-900">
+            Optionnel : Relier à votre propre Google Sheet (pour Google Sites externe)
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Ici dans cet aperçu, les résultats d'équipe sont synchronisés automatiquement. Si vous collez le code sur un site externe et souhaitez que toutes les réponses arrivent aussi en direct dans votre propre fichier Google Sheets :
+          </p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              id="custom-webhook-input"
+              type="url"
+              placeholder="URL Web App Google Script (https://script.google.com/macros/s/.../exec)"
+              class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs outline-none focus:border-slate-900"
+            />
+            <button
+              onclick="window.app.saveWebhookUrl()"
+              class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0"
+            >
+              Activer URL
+            </button>
+          </div>
+          <details class="text-xs text-slate-600 pt-1">
+            <summary class="font-bold text-blue-700 cursor-pointer hover:underline">
+              Voir le mini-script Google Sheets (30 secondes à copier)
+            </summary>
+            <div class="mt-2 p-2.5 rounded-xl bg-slate-900 text-slate-100 font-mono text-[11px] overflow-x-auto leading-relaxed">
+              <div>1. Créez un Google Sheet → Extensions → Apps Script</div>
+              <div>2. Collez ce code et cliquez sur <strong>Déployer → Nouveau déploiement → Application Web (Accès : Tout le monde)</strong> :</div>
+              <pre id="apps-script-code" class="mt-2 text-emerald-300 select-all">function doPost(e) {
+                var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+                var d = JSON.parse(e.postData.contents);
+                sheet.appendRow([new Date(), d.name, d.dominantColor, d.secondaryColor, d.scores.BLEU, d.scores.ROUGE, d.scores.VERT, d.scores.JAUNE, d.answers]);
+                return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+              }
+              function doGet() {
+                var rows = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getDataRange().getValues();
+                return ContentService.createTextOutput(JSON.stringify(rows)).setMimeType(ContentService.MimeType.JSON);
+              }</pre>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+  <!-- ========================================================= -->
+  <!-- APPLICATION LOGIC + FIREBASE REALTIME + HIDDEN SCORING    -->
+  <!-- ========================================================= -->
+  <script type="module">
+    // =========================================================
+    // 1. HIDDEN SCORING KEY (Strictly internal — never shown)
+    // =========================================================
+    const SCORING_MAP = {
+      1:  { d: 'BLEU', c: 'ROUGE', b: 'VERT', a: 'JAUNE' },
+      2:  { b: 'BLEU', a: 'ROUGE', c: 'VERT', d: 'JAUNE' },
+      3:  { a: 'BLEU', b: 'ROUGE', d: 'VERT', c: 'JAUNE' },
+      4:  { a: 'BLEU', c: 'ROUGE', d: 'VERT', b: 'JAUNE' },
+      5:  { a: 'BLEU', d: 'ROUGE', b: 'VERT', c: 'JAUNE' },
+      6:  { a: 'BLEU', d: 'ROUGE', c: 'VERT', b: 'JAUNE' },
+      7:  { a: 'BLEU', c: 'ROUGE', d: 'VERT', b: 'JAUNE' },
+      8:  { b: 'BLEU', c: 'ROUGE', a: 'VERT', d: 'JAUNE' },
+      9:  { c: 'BLEU', b: 'ROUGE', d: 'VERT', a: 'JAUNE' },
+      10: { c: 'BLEU', b: 'ROUGE', a: 'VERT', d: 'JAUNE' },
+      11: { b: 'BLEU', a: 'ROUGE', d: 'VERT', c: 'JAUNE' },
+      12: { d: 'BLEU', c: 'ROUGE', a: 'VERT', b: 'JAUNE' },
+      13: { c: 'BLEU', d: 'ROUGE', a: 'VERT', b: 'JAUNE' },
+      14: { d: 'BLEU', a: 'ROUGE', c: 'VERT', b: 'JAUNE' },
+      15: { c: 'BLEU', a: 'ROUGE', b: 'VERT', d: 'JAUNE' },
+      16: { a: 'BLEU', c: 'ROUGE', b: 'VERT', d: 'JAUNE' },
+      17: { d: 'BLEU', b: 'ROUGE', c: 'VERT', a: 'JAUNE' },
+      18: { c: 'BLEU', d: 'ROUGE', b: 'VERT', a: 'JAUNE' },
+      19: { b: 'BLEU', d: 'ROUGE', a: 'VERT', c: 'JAUNE' },
+      20: { c: 'BLEU', d: 'ROUGE', a: 'VERT', b: 'JAUNE' },
+      21: { b: 'BLEU', d: 'ROUGE', a: 'VERT', c: 'JAUNE' },
+      22: { c: 'BLEU', b: 'ROUGE', a: 'VERT', d: 'JAUNE' },
+      23: { d: 'BLEU', a: 'ROUGE', b: 'VERT', c: 'JAUNE' },
+      24: { c: 'BLEU', a: 'ROUGE', b: 'VERT', d: 'JAUNE' },
+      25: { b: 'BLEU', d: 'ROUGE', a: 'VERT', c: 'JAUNE' }
+    };
+
+    const COLOR_ORDER = ['ROUGE', 'JAUNE', 'VERT', 'BLEU'];
+
+    // ---------------------------------------------------------
+    // TEAM SYNC: paste your Google Apps Script Web App URL here
+    // (ends with /exec). Leave '' to run in local mode (this
+    // device only, nothing shared).
+    // ---------------------------------------------------------
+    const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwbxEFyprppo8LkT3RSWAiq7PLHKusA-AYqgZdJ1i97ifv6ehTZpZJjZZ80yz9cBhBf/exec';
+
+    // =========================================================
+    // 2. DETAILED PROFILES FROM THE TEXAGERES DISC PDF (FR & EN)
+    // =========================================================
+    const COLOR_PROFILES = {
+      ROUGE: {
+        key: 'ROUGE',
+        letter: 'D',
+        hex: '#DC2626',
+        name: { fr: 'Rouge', en: 'Red' },
+        roleTitle: { fr: 'Le « D » de Dominant', en: 'The "D" for Dominant' },
+        quadrantLabel: { fr: 'DOMINANT', en: 'DOMINANT' },
+        badges: {
+          fr: [
+            'Environnement considéré comme hostile',
+            'Orienté résultats',
+            'Action (J’agis puis je réfléchis)',
+            'Je suis + fort que l’environnement'
+          ],
+          en: [
+            'Environment perceived as hostile (Task-focused)',
+            'Results-oriented',
+            'Action (I act then think)',
+            'I am stronger than the environment'
+          ]
+        },
+        pdfSummary: {
+          fr: "Le dominant a une vision d'ensemble de la tâche à accomplir et vise l'objectif et le résultat final. Pour cela, il est capable de relever des défis et d'assumer des responsabilités en ayant en tête la réussite de tous. Le dominant est un fonceur qui n'a pas froid aux yeux et n'a pas peur de faire des erreurs, qu'il assume d'ailleurs la plupart du temps.",
+          en: "The Dominant profile holds a big-picture vision of the task to be accomplished and focuses on the final objective and result. To achieve this, they readily take on challenges and responsibilities with everyone's success in mind. A bold go-getter who isn't afraid of making mistakes—and owns up to them most of the time."
+        },
+        strengths: {
+          fr: "Vision d'ensemble, rapidité d'action, goût du défi, prise de responsabilités et focalisation sur l'objectif final.",
+          en: "Big-picture vision, speed of execution, appetite for challenges, accountability, and laser focus on concrete results."
+        },
+        blindSpots: {
+          fr: "Son enthousiasme et son besoin d'action peuvent parfois être perçus comme de l'agressivité. Il peut être rapidement agacé si les choses ne vont pas assez vite. Son franc-parler peut être mal interprété et créer des tensions avec les autres membres de l'équipe.",
+          en: "Their enthusiasm and need for action can sometimes be perceived as aggressiveness. They can get quickly annoyed if things do not move fast enough, and their bluntness may be misinterpreted and create tension within the team."
+        },
+        badgeBg: 'bg-red-600 text-white',
+        lightBg: 'bg-red-50/90 border-red-200',
+        pillActive: 'bg-red-600 text-white shadow-sm border-red-600',
+        pillInactive: 'bg-red-50 text-red-700 hover:bg-red-100 border-red-200',
+        textColor: 'text-red-700',
+        barColor: 'bg-red-600'
+      },
+      JAUNE: {
+        key: 'JAUNE',
+        letter: 'I',
+        hex: '#EAB308',
+        name: { fr: 'Jaune', en: 'Yellow' },
+        roleTitle: { fr: 'Le « I » d’Influent', en: 'The "I" for Influent' },
+        quadrantLabel: { fr: 'INFLUENT', en: 'INFLUENT' },
+        badges: {
+          fr: [
+            'Environnement considéré comme favorable',
+            'Orienté solutions',
+            'Action (J’agis puis je réfléchis)',
+            'Je suis + fort que l’environnement'
+          ],
+          en: [
+            'Environment perceived as favorable (People-focused)',
+            'Solutions-oriented',
+            'Action (I act then think)',
+            'I am stronger than the environment'
+          ]
+        },
+        pdfSummary: {
+          fr: "Tourné vers les autres, l'influent apporte enthousiasme, bonne humeur et motivation à son équipe. Animal social par excellence, l'influent est à l'aise avec tout le monde et aime travailler en équipe. Désireux d'apprendre de nouvelles choses et de monter en compétences, il se passionne pour de nombreux sujets.",
+          en: "People-oriented by nature, the Influent profile brings enthusiasm, good mood, and motivation to their team. A natural social connector, they feel comfortable with everyone and love working as a team. Eager to learn new things and build new skills, they get passionate about many subjects."
+        },
+        strengths: {
+          fr: "Enthousiasme communicatif, créativité orientée solutions, aisance relationnelle, curiosité d'apprendre et énergie d'équipe.",
+          en: "Contagious enthusiasm, solution-oriented creativity, social ease, curiosity to learn, and strong team motivation."
+        },
+        blindSpots: {
+          fr: "L'influent apprécie la compagnie des autres et aime se sentir au centre de l'attention. Pour qu'il se sente bien et valorisé dans son travail, il appréciera toujours les encouragements et les compliments de son manager.",
+          en: "The Influent profile enjoys company and likes being at the center of attention. To feel fulfilled and valued at work, they always appreciate encouragement and recognition from their manager."
+        },
+        badgeBg: 'bg-amber-400 text-slate-950',
+        lightBg: 'bg-amber-50/90 border-amber-200',
+        pillActive: 'bg-amber-400 text-slate-950 shadow-sm border-amber-400',
+        pillInactive: 'bg-amber-50 text-amber-800 hover:bg-amber-100 border-amber-200',
+        textColor: 'text-amber-700',
+        barColor: 'bg-amber-400'
+      },
+      VERT: {
+        key: 'VERT',
+        letter: 'S',
+        hex: '#16A34A',
+        name: { fr: 'Vert', en: 'Green' },
+        roleTitle: { fr: 'Le « S » de Stable', en: 'The "S" for Steady / Stable' },
+        quadrantLabel: { fr: 'STABLE', en: 'STABLE' },
+        badges: {
+          fr: [
+            'Environnement considéré comme favorable',
+            'Orienté résultats & humain',
+            'Réflexion (Je réfléchis puis j’agis)',
+            'L’environnement est + fort que moi'
+          ],
+          en: [
+            'Environment perceived as favorable (People-focused)',
+            'Results & harmony-oriented',
+            'Reflection (I think then act)',
+            'The environment is stronger than me'
+          ]
+        },
+        pdfSummary: {
+          fr: "D'un naturel calme et mesuré, le profil vert ou stable pense avant tout au bien-être de ceux avec qui il travaille. Le stable est une personne qui préfère rester en retrait, mais ne refusera jamais d'aider un collègue. Son comportement rassurant est un élément stabilisateur fort pour une équipe.",
+          en: "Naturally calm and measured, the Green (Steady/Stable) profile puts the well-being of their colleagues first. They prefer staying in the background but will never refuse to help a teammate. Their reassuring behavior is a powerful stabilizing force for a team."
+        },
+        strengths: {
+          fr: "Calme, écoute sincère, entraide constante, réflexion avant d'agir et rôle de pilier stabilisateur rassurant pour l'équipe.",
+          en: "Calmness, genuine listening, unfailing support, thinking before acting, and serving as a reassuring stabilizer for the group."
+        },
+        blindSpots: {
+          fr: "Le stable réfléchit avant d'agir et n'aime pas être stressé. En cas de pression trop forte, il peut se sentir harcelé et très mal vivre la situation, sans oser en parler. Sensible, il évite le conflit et prend parfois sur lui trop longtemps. Il est important d'être attentif à ses émotions et de ne pas laisser de malentendus non réglés.",
+          en: "They dislike stress: under heavy pressure, they may feel overwhelmed and suffer quietly without daring to speak up. Sensitive and conflict-averse, they sometimes hold things in for too long. Be attentive to their emotions and never leave misunderstandings unresolved."
+        },
+        badgeBg: 'bg-green-600 text-white',
+        lightBg: 'bg-green-50/90 border-green-200',
+        pillActive: 'bg-green-600 text-white shadow-sm border-green-600',
+        pillInactive: 'bg-green-50 text-green-700 hover:bg-green-100 border-green-200',
+        textColor: 'text-green-700',
+        barColor: 'bg-green-600'
+      },
+      BLEU: {
+        key: 'BLEU',
+        letter: 'C',
+        hex: '#2563EB',
+        name: { fr: 'Bleu', en: 'Blue' },
+        roleTitle: { fr: 'Le « C » de Conforme', en: 'The "C" for Compliant / Conscientious' },
+        quadrantLabel: { fr: 'CONFORME', en: 'COMPLIANT' },
+        badges: {
+          fr: [
+            'Environnement considéré comme hostile',
+            'Orienté solutions',
+            'Réflexion (Je réfléchis puis j’agis)',
+            'L’environnement est + fort que moi'
+          ],
+          en: [
+            'Environment perceived as hostile (Task-focused)',
+            'Solutions-oriented',
+            'Reflection (I think then act)',
+            'The environment is stronger than me'
+          ]
+        },
+        pdfSummary: {
+          fr: "Le conforme aime que les choses soient faites selon les règles. Méthodique, ordonné et pointilleux, il est réfléchi, autonome et sait identifier les problèmes de fonctionnement d'un coup d'œil. Il sait ce qu'il a à faire, s'acquitte de sa tâche et apprécie son autonomie. Il est fiable et son équipe peut compter sur lui et sur ses compétences.",
+          en: "The Compliant/Conscientious profile likes things done by the rules. Methodical, orderly, and meticulous, they are thoughtful, autonomous, and can spot operational problems at a glance. They know what they have to do, complete their tasks reliably, value autonomy, and are someone the team can always count on."
+        },
+        strengths: {
+          fr: "Rigueur, méthode, respect des règles, autonomie, fiabilité élevée et capacité à identifier les problèmes d'un coup d'œil.",
+          en: "Rigor, method, respect for standards, autonomy, high reliability, and ability to spot operational flaws at a glance."
+        },
+        blindSpots: {
+          fr: "Dès qu'un doute apparaît, le conforme peut avoir peur de faire une erreur et n'ose pas prendre de décision s'il n'a pas toutes les informations en main. Adepte du détail, il peut parfois tomber dans le perfectionnisme et perdre du temps là où ce n'est pas forcément nécessaire.",
+          en: "As soon as doubt appears, they may fear making a mistake and hesitate to decide without having all the information in hand. Detail-oriented, they can slip into perfectionism and lose time where it isn't strictly necessary."
+        },
+        badgeBg: 'bg-blue-600 text-white',
+        lightBg: 'bg-blue-50/90 border-blue-200',
+        pillActive: 'bg-blue-600 text-white shadow-sm border-blue-600',
+        pillInactive: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200',
+        textColor: 'text-blue-700',
+        barColor: 'bg-blue-600'
+      }
+    };
+
+    // =========================================================
+    // 3. ALL 25 BILINGUAL QUESTIONS (FR & EN)
+    // =========================================================
+    const QUESTIONS = [
+      {
+        id: 1,
+        fr: "Quand je suis au mieux, mon interlocuteur pourrait me décrire comme une personne :",
+        en: "When I am at my best, the person I am speaking with might describe me as someone who is:",
+        options: {
+          a: { fr: "imaginative, stimulante, persuasive;", en: "imaginative, stimulating, persuasive;" },
+          b: { fr: "compréhensive, encourageante, diplomate;", en: "understanding, encouraging, diplomatic;" },
+          c: { fr: "pratique, centrée sur les résultats, efficace;", en: "practical, results-oriented, efficient;" },
+          d: { fr: "logique, systématique, précise.", en: "logical, systematic, precise." }
+        }
+      },
+      {
+        id: 2,
+        fr: "Quand je dois présenter une idée, une information, un projet :",
+        en: "When I have to present an idea, information, or a project:",
+        options: {
+          a: { fr: "je me prépare pour présenter cette information de façon brève et concise;", en: "I prepare to present this information briefly and concisely;" },
+          b: { fr: "je me prépare soigneusement : je rassemble les documents qui me serviront de preuve et j'essaie de prévoir les objections;", en: "I prepare carefully: I gather the documents that will serve as proof and try to anticipate objections;" },
+          c: { fr: "je me prépare bien, mais je m'inquiète du climat qui va régner dans ce comité;", en: "I prepare well, but I worry about the atmosphere that will prevail in the committee;" },
+          d: { fr: "je me prépare de façon globale parce que je sais que je trouverai les mots qu'il faut une fois en situation.", en: "I prepare in a broad, general way because I know I will find the right words once I am in the situation." }
+        }
+      },
+      {
+        id: 3,
+        fr: "Je suis le plus convaincant(e) quand :",
+        en: "I am most convincing when:",
+        options: {
+          a: { fr: "j'ai assez de temps pour présenter une argumentation solide;", en: "I have enough time to present a solid argument;" },
+          b: { fr: "j'ai un objectif concret et réaliste à faire valoir;", en: "I have a concrete and realistic goal to put forward;" },
+          c: { fr: "j'ai un point de vue original;", en: "I have an original point of view;" },
+          d: { fr: "je peux compter sur l'estime et le respect de mes interlocuteurs.", en: "I can count on the esteem and respect of the people I am speaking with." }
+        }
+      },
+      {
+        id: 4,
+        fr: "Quand je dois régler un problème, j'ai tendance à :",
+        en: "When I have to solve a problem, I tend to:",
+        options: {
+          a: { fr: "obtenir suffisamment d'information pour choisir la meilleure solution;", en: "gather enough information to choose the best solution;" },
+          b: { fr: "laisser la solution émerger à l'intérieur de moi;", en: "let the solution emerge from within me;" },
+          c: { fr: "choisir rapidement la solution la plus pratique;", en: "quickly choose the most practical solution;" },
+          d: { fr: "trouver une solution qui me convienne et qui soit acceptable pour les autres.", en: "find a solution that suits me and is acceptable to others." }
+        }
+      },
+      {
+        id: 5,
+        fr: "Quand je dois donner un feed-back critique :",
+        en: "When I have to give critical feedback:",
+        options: {
+          a: { fr: "je documente mon feed-back avec des données et des faits précis;", en: "I back up my feedback with specific data and facts;" },
+          b: { fr: "je formule mon feed-back de façon à ne pas heurter l'autre;", en: "I phrase my feedback so as not to offend the other person;" },
+          c: { fr: "je trouve une façon originale de présenter mon feed-back;", en: "I find an original way to present my feedback;" },
+          d: { fr: "je dis les choses comme elles sont.", en: "I tell it like it is." }
+        }
+      },
+      {
+        id: 6,
+        fr: "Lors d'une présentation :",
+        en: "During a presentation:",
+        options: {
+          a: { fr: "je présente tous les points importants dans un ordre logique;", en: "I present all the important points in a logical order;" },
+          b: { fr: "je donne plus ou moins un spectacle afin de capter l'attention;", en: "I more or less put on a show to capture attention;" },
+          c: { fr: "je mets l'accent sur la compréhension et l'implication des participants;", en: "I focus on the understanding and involvement of the participants;" },
+          d: { fr: "je vais droit au but.", en: "I get straight to the point." }
+        }
+      },
+      {
+        id: 7,
+        fr: "Si l'on devait indiquer mes défauts, on dirait probablement que je suis :",
+        en: "If someone had to point out my flaws, they would probably say that I am:",
+        options: {
+          a: { fr: "maître de soi et lent;", en: "self-controlled and slow;" },
+          b: { fr: "indiscipliné et excité;", en: "undisciplined and excitable;" },
+          c: { fr: "autoritaire et impatient;", en: "authoritarian and impatient;" },
+          d: { fr: "trop sensible aux autres et trop concerné par eux.", en: "overly sensitive to others and overly concerned about them." }
+        }
+      },
+      {
+        id: 8,
+        fr: "Si j'étais un tableau, les gens me verraient comme :",
+        en: "If I were a painting, people would see me as:",
+        options: {
+          a: { fr: "un déjeuner sur l'herbe;", en: "a picnic on the grass;" },
+          b: { fr: "un jardin impeccable;", en: "an immaculate garden;" },
+          c: { fr: "une montagne;", en: "a mountain;" },
+          d: { fr: "un volcan en éruption.", en: "an erupting volcano." }
+        }
+      },
+      {
+        id: 9,
+        fr: "Répondre à la question 8 m'a paru :",
+        en: "Answering question 8 seemed to me:",
+        options: {
+          a: { fr: "intéressant;", en: "interesting;" },
+          b: { fr: "quelque peu ridicule;", en: "somewhat ridiculous;" },
+          c: { fr: "incongru;", en: "out of place / incongruous;" },
+          d: { fr: "intrigant.", en: "intriguing." }
+        }
+      },
+      {
+        id: 10,
+        fr: "Dans une discussion :",
+        en: "In a discussion:",
+        options: {
+          a: { fr: "je tiens compte des idées différentes des miennes;", en: "I take into account ideas that differ from my own;" },
+          b: { fr: "je défends mon point de vue avec insistance;", en: "I defend my point of view insistently;" },
+          c: { fr: "j'argumente de façon pertinente;", en: "I argue in a relevant, well-founded manner;" },
+          d: { fr: "je présente souvent les choses sous un angle différent.", en: "I often present things from a different angle." }
+        }
+      },
+      {
+        id: 11,
+        fr: "Pour moi, les discussions de fond sont :",
+        en: "To me, in-depth discussions are:",
+        options: {
+          a: { fr: "souvent une perte de temps (du pelletage de nuages);", en: "often a waste of time (blue-sky thinking / unproductive);" },
+          b: { fr: "intéressantes si on peut vider une question à la fois;", en: "interesting if we can settle one issue at a time;" },
+          c: { fr: "intéressantes si les gens ne se prennent pas trop au sérieux;", en: "interesting if people don't take themselves too seriously;" },
+          d: { fr: "riches si les gens cherchent à se comprendre plutôt qu'à demeurer sur leur position.", en: "enriching if people seek to understand each other rather than stand their ground." }
+        }
+      },
+      {
+        id: 12,
+        fr: "Dans une situation conflictuelle qui ne me concerne pas directement :",
+        en: "In a conflict situation that does not directly concern me:",
+        options: {
+          a: { fr: "je fais ou propose des compromis;", en: "I make or suggest compromises;" },
+          b: { fr: "je ne peux prévoir ma réaction;", en: "I cannot predict my reaction;" },
+          c: { fr: "je trouve une solution au conflit;", en: "I find a solution to the conflict;" },
+          d: { fr: "j'attends que la poussière retombe.", en: "I wait for the dust to settle." }
+        }
+      },
+      {
+        id: 13,
+        fr: "Quand je suis témoin d'une altercation entre deux autres membres du personnel :",
+        en: "When I witness an altercation between two other staff members:",
+        options: {
+          a: { fr: "je tente de les amener à se comprendre;", en: "I try to get them to understand each other;" },
+          b: { fr: "je m'implique personnellement;", en: "I get personally involved;" },
+          c: { fr: "je m'abstiens d'intervenir pour éviter d'envenimer la situation;", en: "I refrain from intervening to avoid making the situation worse;" },
+          d: { fr: "j'essaie de leur faire entendre raison.", en: "I try to make them listen to reason." }
+        }
+      },
+      {
+        id: 14,
+        fr: "Quand je suis engagé dans un conflit, ma réaction habituelle est :",
+        en: "When I am involved in a conflict, my usual reaction is:",
+        options: {
+          a: { fr: "d'amener l'autre à voir le problème tel qu'il est;", en: "to get the other person to see the problem as it really is;" },
+          b: { fr: "d'analyser avec l'autre la situation selon différents points de vue;", en: "to analyze the situation with the other person from different points of view;" },
+          c: { fr: "d'investir beaucoup d'énergie pour trouver un compromis viable;", en: "to invest a lot of energy into finding a viable compromise;" },
+          d: { fr: "de laisser le temps faire son œuvre.", en: "to let time take its course." }
+        }
+      },
+      {
+        id: 15,
+        fr: "La dimension interpersonnelle que j'aurais avantage à développer est :",
+        en: "The interpersonal dimension I would benefit from developing is:",
+        options: {
+          a: { fr: "l'écoute;", en: "listening;" },
+          b: { fr: "l'affirmation de soi;", en: "assertiveness;" },
+          c: { fr: "l'expression affective;", en: "emotional expression;" },
+          d: { fr: "le contrôle de mes réactions.", en: "controlling my reactions." }
+        }
+      },
+      {
+        id: 16,
+        fr: "Quand j'interagis avec quelqu'un :",
+        en: "When I interact with someone:",
+        options: {
+          a: { fr: "je fais peu de gestes;", en: "I make few gestures;" },
+          b: { fr: "mes gestes sont plutôt harmonieux;", en: "my gestures are rather harmonious;" },
+          c: { fr: "mes gestes peuvent être saccadés;", en: "my gestures can be abrupt / jerky;" },
+          d: { fr: "mes gestes sont amples et nombreux.", en: "my gestures are broad and frequent." }
+        }
+      },
+      {
+        id: 17,
+        fr: "Quand quelqu'un m'expose un problème personnel :",
+        en: "When someone shares a personal problem with me:",
+        options: {
+          a: { fr: "je cherche à dédramatiser la situation en l'envisageant sous un angle différent;", en: "I try to defuse the situation by looking at it from a different angle;" },
+          b: { fr: "je cherche une solution;", en: "I look for a solution;" },
+          c: { fr: "j'écoute attentivement et je reformule ce que je comprends;", en: "I listen attentively and rephrase what I understand;" },
+          d: { fr: "je pose beaucoup de questions afin d'avoir une vision complète de la situation.", en: "I ask a lot of questions in order to get a complete picture of the situation." }
+        }
+      },
+      {
+        id: 18,
+        fr: "On me perçoit comme quelqu'un qui :",
+        en: "People perceive me as someone who:",
+        options: {
+          a: { fr: "est souvent imprévisible;", en: "is often unpredictable;" },
+          b: { fr: "valorise les relations interpersonnelles;", en: "values interpersonal relationships;" },
+          c: { fr: "exige rigueur et logique;", en: "demands rigor and logic;" },
+          d: { fr: "se montre très compétitif.", en: "is very competitive." }
+        }
+      },
+      {
+        id: 19,
+        fr: "Dans mes interactions, il m'arrive souvent de déplorer le fait que les gens :",
+        en: "In my interactions, I often find myself regretting that people:",
+        options: {
+          a: { fr: "ne soient pas conscients de leurs sentiments;", en: "are not aware of their feelings;" },
+          b: { fr: "parlent sans réfléchir;", en: "speak without thinking;" },
+          c: { fr: "manquent d'imagination;", en: "lack imagination;" },
+          d: { fr: "parlent pour ne rien dire.", en: "talk without saying anything meaningful." }
+        }
+      },
+      {
+        id: 20,
+        fr: "Quand je suis stressé ou sur la défensive, je deviens :",
+        en: "When I am stressed or on the defensive, I become:",
+        options: {
+          a: { fr: "émotif;", en: "emotional;" },
+          b: { fr: "impulsif;", en: "impulsive;" },
+          c: { fr: "trop sur mes gardes;", en: "overly guarded;" },
+          d: { fr: "dominateur.", en: "domineering." }
+        }
+      },
+      {
+        id: 21,
+        fr: "Je défends mes idées :",
+        en: "I defend my ideas:",
+        options: {
+          a: { fr: "avec tact;", en: "with tact;" },
+          b: { fr: "avec des arguments logiques;", en: "with logical arguments;" },
+          c: { fr: "avec entrain;", en: "with enthusiasm;" },
+          d: { fr: "avec force.", en: "forcefully." }
+        }
+      },
+      {
+        id: 22,
+        fr: "Quand j'ai une décision à prendre :",
+        en: "When I have a decision to make:",
+        options: {
+          a: { fr: "je tiens compte des personnes concernées;", en: "I take into account the people involved;" },
+          b: { fr: "j'opte pour la décision la plus pratique;", en: "I opt for the most practical decision;" },
+          c: { fr: "j'essaie de prendre la décision la plus éclairée;", en: "I try to make the most informed decision;" },
+          d: { fr: "je me fie à mon intuition.", en: "I trust my intuition." }
+        }
+      },
+      {
+        id: 23,
+        fr: "Quand j'écoute quelqu'un :",
+        en: "When I listen to someone:",
+        options: {
+          a: { fr: "j'ai tendance à l'interrompre pour donner mon idée;", en: "I tend to interrupt them to share my idea;" },
+          b: { fr: "j'essaie de bien saisir son point de vue;", en: "I try to fully grasp their point of view;" },
+          c: { fr: "je l'écoute en pensant à autre chose;", en: "I listen to them while thinking about something else;" },
+          d: { fr: "je lui laisse le temps d'exprimer sa pensée.", en: "I give them time to express their thoughts." }
+        }
+      },
+      {
+        id: 24,
+        fr: "Quand on me donne du feed-back critique :",
+        en: "When someone gives me critical feedback:",
+        options: {
+          a: { fr: "je me défends;", en: "I defend myself;" },
+          b: { fr: "j'essaie de comprendre;", en: "I try to understand;" },
+          c: { fr: "je demande des preuves;", en: "I ask for proof;" },
+          d: { fr: "je réagis de façon impulsive.", en: "I react impulsively." }
+        }
+      },
+      {
+        id: 25,
+        fr: "J'ai répondu à ce questionnaire :",
+        en: "I answered this questionnaire:",
+        options: {
+          a: { fr: "en essayant d'analyser mon comportement le plus justement possible;", en: "by trying to analyze my behavior as accurately as possible;" },
+          b: { fr: "en m'interrogeant sur sa valeur scientifique;", en: "while questioning its scientific validity;" },
+          c: { fr: "de façon insouciante;", en: "in a carefree manner;" },
+          d: { fr: "rapidement, sans me poser de questions.", en: "quickly, without overthinking it." }
+        }
+      }
+    ];
+
+    // =========================================================
+    // 4. APPLICATION STATE
+    // =========================================================
+    const state = {
+      lang: 'fr',
+      mainTab: 'quiz',       // 'quiz' | 'team'
+      stage: 'start',        // 'start' | 'questions' | 'quickGrid' | 'done'
+      name: '',
+      nameError: false,
+      currentQ: 0,           // 0..24
+      answers: {},           // { 1: 'a', 2: 'c', ... }
+      myResult: null,
+      guideTab: 'ROUGE',     // 'ROUGE' | 'JAUNE' | 'VERT' | 'BLEU' | 'METHOD'
+      modalGuideTab: 'ROUGE',
+      inspectingMember: null,
+      confirmDeleteId: null,
+      submissions: [],
+      syncUrl: SYNC_URL,
+      adminKey: '',
+      teamLoading: false,
+      teamLoaded: false,     // true once the first load from the Sheet has finished
+      teamError: '',
+      sendStatus: ''         // '' | 'sending' | 'sent' | 'failed'
+    };
+
+    // =========================================================
+    // 5. EVALUATION FUNCTION (Internal Scoring)
+    // =========================================================
+    function evaluateDISC(answersObj) {
+      const scores = { BLEU: 0, ROUGE: 0, VERT: 0, JAUNE: 0 };
+      for (let q = 1; q <= 25; q++) {
+        const letter = String(answersObj[q] || '').toLowerCase();
+        const color = SCORING_MAP[q]?.[letter];
+        if (color && scores[color] !== undefined) {
+          scores[color] += 1;
+        }
+      }
+      const sortedColors = [...COLOR_ORDER].sort((a, b) => scores[b] - scores[a]);
+      return {
+        scores,
+        sortedColors,
+        dominantColor: sortedColors[0],
+        secondaryColor: sortedColors[1]
+      };
+    }
+
+    function parseAnswers(raw) {
+      if (!raw) return {};
+      if (typeof raw === 'object') return raw;
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // =========================================================
+    // 5b. TIE HELPERS (dominant / secondary can be shared)
+    // =========================================================
+    function getTopColors(scores) {
+      const val = (c) => Number(scores?.[c] ?? 0);
+      const max = Math.max(...COLOR_ORDER.map(val));
+      return COLOR_ORDER.filter((c) => val(c) === max);
+    }
+
+    function getSecondColors(scores) {
+      const val = (c) => Number(scores?.[c] ?? 0);
+      const top = getTopColors(scores);
+      if (top.length > 1) return []; // the tie already covers the top spots
+      const rest = COLOR_ORDER.filter((c) => !top.includes(c));
+      const max2 = Math.max(...rest.map(val));
+      return rest.filter((c) => val(c) === max2);
+    }
+
+    function colorLabel(keys, lang, withLetter = false) {
+      return keys
+        .map((k) => {
+          const p = COLOR_PROFILES[k];
+          if (!p) return k;
+          return withLetter ? `${p.name[lang]} (${p.letter})` : p.name[lang];
+        })
+        .join(' / ');
+    }
+
+    // =========================================================
+    // 6. TEAM SYNC (Google Sheets via Apps Script — private)
+    //    Participants only SEND their own result.
+    //    Reading the team table needs the facilitator key,
+    //    which is checked on the server (Apps Script), not here.
+    // =========================================================
+    // Everyone can SEE the team scores. Only the facilitator (key) can
+    // download the files and delete results.
+    function canSeeTeam() {
+      return true;
+    }
+
+    function canAdmin() {
+      return !state.syncUrl || Boolean(state.adminKey);
+    }
+
+    function initCloudSync() {
+      let savedKey = '';
+      try {
+        savedKey = sessionStorage.getItem('disc_admin_key') || '';
+      } catch (e) {
+        /* storage can be blocked inside iframes — fine */
+      }
+      updateSyncBadge();
+      // a remembered key is only a CANDIDATE: facilitator mode starts only after Google confirms it
+      if (state.syncUrl) loadTeamFromSheet(savedKey, true);
+      setInterval(() => {
+        if (state.syncUrl && (state.mainTab === 'team' || state.stage === 'done')) loadTeamFromSheet();
+      }, 30000);
+    }
+
+    // candidateKey = a key typed by the user (or remembered), NOT yet trusted.
+    // It becomes the active facilitator key only after the server accepts it.
+    async function loadTeamFromSheet(candidateKey, quiet) {
+      if (!state.syncUrl) return;
+      state.teamLoading = true;
+      try {
+        const sep = state.syncUrl.includes('?') ? '&' : '?';
+        const keyToTry = candidateKey || state.adminKey;
+        const q = keyToTry ? 'key=' + encodeURIComponent(keyToTry) : 'public=1';
+        const res = await fetch(state.syncUrl + sep + q);
+        const data = await res.json();
+        if (data && data.error) {
+          // server refused the key: no facilitator powers, ever
+          state.adminKey = '';
+          state.teamError = quiet ? '' : 'key';
+          try { sessionStorage.removeItem('disc_admin_key'); } catch (e) {}
+        } else if (Array.isArray(data)) {
+          state.teamError = '';
+          state.teamLoaded = true;
+          if (keyToTry) {
+            state.adminKey = keyToTry; // confirmed by the server
+            try { sessionStorage.setItem('disc_admin_key', keyToTry); } catch (e) {}
+          }
+          state.submissions = data
+            .filter((r) => r && r[1] && !isNaN(new Date(r[0]).getTime()) && r[4] !== '' && !isNaN(Number(r[4])))
+            .map((r, idx) => ({
+              id: String(r[9] || 'sheet-' + idx),
+              createdAt: new Date(r[0]).getTime(),
+              name: String(r[1]),
+              dominantColor: r[2] || 'ROUGE',
+              secondaryColor: r[3] || 'JAUNE',
+              scores: {
+                BLEU: Number(r[4] || 0),
+                ROUGE: Number(r[5] || 0),
+                VERT: Number(r[6] || 0),
+                JAUNE: Number(r[7] || 0)
+              },
+              answers: r[8] || '{}'
+            }))
+            .reverse();
+        }
+      } catch (e) {
+        console.warn('Team load error:', e);
+        state.teamError = 'network';
+      }
+      state.teamLoading = false;
+      animateNext = false;
+      // don't wipe the facilitator-key box while someone is typing in it
+      const keyBox = document.getElementById('admin-key-input');
+      if (!candidateKey && keyBox && (keyBox.value || document.activeElement === keyBox)) return;
+      render();
+    }
+
+    async function sendRecord(record) {
+      state.sendStatus = 'sending';
+      render();
+      try {
+        // text/plain + no-cors = the standard way to POST to Apps Script from any page
+        await fetch(state.syncUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            id: record.id,
+            name: record.name,
+            scores: record.scores,
+            dominantColor: record.dominantColor,
+            secondaryColor: record.secondaryColor,
+            answers: record.answers,
+            createdAt: record.createdAt
+          })
+        });
+        state.sendStatus = 'sent';
+      } catch (e) {
+        console.warn('Send error:', e);
+        state.sendStatus = 'failed';
+      }
+      animateNext = false;
+      render();
+      setTimeout(loadTeamFromSheet, 1200);
+    }
+
+    function buildSendStatusHtml() {
+      if (!state.syncUrl || !state.sendStatus) return '';
+      const fr = state.lang === 'fr';
+      const map = {
+        sending: ['bg-slate-50 text-slate-600 border-slate-200', fr ? 'Envoi de votre résultat…' : 'Sending your result…'],
+        sent: ['bg-emerald-50 text-emerald-700 border-emerald-200', fr ? '✓ Résultat transmis à l’animateur.' : '✓ Result sent to the facilitator.'],
+        failed: ['bg-red-50 text-red-700 border-red-200', fr ? '⚠ Envoi impossible (connexion ?). Gardez votre Excel personnel.' : '⚠ Could not send (connection?). Keep your personal Excel file.']
+      };
+      const [cls, txt] = map[state.sendStatus] || map.sending;
+      const retry =
+        state.sendStatus === 'failed'
+          ? `<button type="button" onclick="window.app.retrySend()" class="ml-2 underline font-bold cursor-pointer">${fr ? 'Réessayer' : 'Retry'}</button>`
+          : '';
+      return `<div class="mb-3 px-3 py-2 rounded-xl border text-xs font-semibold ${cls}">${txt}${retry}</div>`;
+    }
+
+    function buildTieNoticeHtml(scores) {
+      const fr = state.lang === 'fr';
+      const top = getTopColors(scores);
+      const sec = getSecondColors(scores);
+      let msg = '';
+      if (top.length > 1) {
+        msg = fr
+          ? `Égalité pour la première place : ${colorLabel(top, 'fr')}. Vous avez plusieurs couleurs dominantes — lisez chacune de leurs fiches.`
+          : `Tie for first place: ${colorLabel(top, 'en')}. You have several dominant colors — read each of their profiles.`;
+      } else if (sec.length > 1) {
+        msg = fr
+          ? `Égalité pour la couleur secondaire : ${colorLabel(sec, 'fr')}.`
+          : `Tie for the secondary color: ${colorLabel(sec, 'en')}.`;
+      }
+      return msg
+        ? `<div class="mt-3 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-900">${msg}</div>`
+        : '';
+    }
+
+    function buildTeamLockHtml() {
+      const fr = state.lang === 'fr';
+      const err =
+        state.teamError === 'key'
+          ? `<p class="text-xs font-semibold text-red-600">${fr ? 'Clé incorrecte.' : 'Incorrect key.'}</p>`
+          : state.teamError === 'network'
+          ? `<p class="text-xs font-semibold text-red-600">${fr ? 'Connexion impossible. Réessayez.' : 'Connection failed. Try again.'}</p>`
+          : '';
+      return `
+        <div class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-3">
+          <h2 class="text-lg font-extrabold text-slate-900">🔒 ${fr ? 'Résultats de l’équipe' : 'Team results'}</h2>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            ${fr ? 'Cette section est réservée à l’animateur. Entrez la clé d’accès pour afficher les résultats.' : 'This section is reserved for the facilitator. Enter the access key to view the results.'}
+          </p>
+          <input id="admin-key-input" type="password" autocomplete="off"
+            onkeydown="if(event.key==='Enter') window.app.unlockTeam()"
+            placeholder="${fr ? 'Clé animateur' : 'Facilitator key'}"
+            class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm outline-none focus:border-slate-900" />
+          ${err}
+          <button type="button" onclick="window.app.unlockTeam()"
+            class="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm cursor-pointer">
+            ${fr ? 'Afficher' : 'Show results'}
+          </button>
+        </div>
+      `;
+    }
+
+    // =========================================================
+    // 7. COMPONENT BUILDER: COMPACT DISC WHEEL + PDF EXPLANATION
+    // =========================================================
+    function buildDISCGuideHtml(scores, dominantColor, secondaryColor, activeTabKey, modePrefix = 'main') {
+      const lang = state.lang;
+      const currentTab = activeTabKey || dominantColor || 'ROUGE';
+      const domKeys = scores ? getTopColors(scores) : [];
+      const secKeys = scores ? getSecondColors(scores) : [];
+      const activeProf = COLOR_PROFILES[currentTab];
+
+      // Build top selector pills
+      const colorPillsHtml = ['ROUGE', 'JAUNE', 'VERT', 'BLEU']
+        .map((cKey) => {
+          const prof = COLOR_PROFILES[cKey];
+          const isActive = currentTab === cKey;
+          const isDom = domKeys.includes(cKey);
+          const isSec = secKeys.includes(cKey);
+          const scoreVal = scores ? scores[cKey] : null;
+
+          return `
+            <button
+              type="button"
+              onclick="window.app.setGuideTab('${cKey}', '${modePrefix}')"
+              class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all flex items-center gap-1.5 cursor-pointer ${
+                isActive ? prof.pillActive : prof.pillInactive
+              }"
+            >
+              <span class="w-2.5 h-2.5 rounded-full shrink-0 border border-white/60" style="background-color:${prof.hex}"></span>
+              <span>${prof.name[lang]} (${prof.letter})</span>
+              ${typeof scoreVal === 'number' ? `<span class="opacity-85 font-semibold">• ${scoreVal}/25</span>` : ''}
+              ${isDom ? `<span class="ml-0.5 px-1.5 py-0.2 text-[10px] rounded-full bg-black/20 uppercase">#1</span>` : ''}
+              ${isSec && !isDom ? `<span class="ml-0.5 px-1.5 py-0.2 text-[10px] rounded-full bg-black/10 uppercase">#2</span>` : ''}
+            </button>
+          `;
+        })
+        .join('');
+
+      const methodPillHtml = `
+        <button
+          type="button"
+          onclick="window.app.setGuideTab('METHOD', '${modePrefix}')"
+          class="px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 cursor-pointer ${
+            currentTab === 'METHOD'
+              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
+          }"
+        >
+          <span>${lang === 'fr' ? 'Axes & Histoire DISC' : 'DISC Axes & History'}</span>
+        </button>
+      `;
+
+      // Right column content
+      let rightColumnHtml = '';
+      if (currentTab === 'METHOD') {
+        rightColumnHtml = `
+          <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-slate-700">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-base font-extrabold text-slate-900">
+                ${lang === 'fr' ? 'Histoire, Objectifs & Les 2 Axes du DISC' : 'History, Objectives & The 2 Axes of DISC'}
+              </h4>
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800">
+                Marston (1928) & Clarke
+              </span>
+            </div>
+            <p class="leading-relaxed">
+              ${
+                lang === 'fr'
+                  ? "Édité par TTI Success Insights, le test DISC a été créé par Walter Vernon Clarke à partir du livre Emotions of Normal People (1928) du psychologue William Moulton Marston. Il révèle la façon dont nous fonctionnons face aux événements selon 4 traits : Dominance (Rouge), Influence (Jaune), Stabilité (Vert) et Conformité (Bleu)."
+                  : "Created by Walter Vernon Clarke from psychologist William Moulton Marston's 1928 book Emotions of Normal People, the DISC model reveals how we respond to challenges, find motivation, and communicate across 4 traits: Dominance (Red), Influence (Yellow), Steadiness (Green), and Conscientiousness (Blue)."
+              }
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <div class="p-3 rounded-xl bg-white border border-slate-200">
+                <div class="font-extrabold text-slate-900 mb-1">
+                  ${lang === 'fr' ? '1. Axe Vertical : Tâche / Relation' : '1. Vertical Axis: Task / Relationship'}
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  ${
+                    lang === 'fr'
+                      ? "<strong>Tâche (Bleu / Rouge) :</strong> perçoivent l'environnement comme hostile et s'investissent pour le modifier.<br><strong>Relation (Jaune / Vert) :</strong> perçoivent l'environnement comme favorable et s'épanouissent dans les relations humaines."
+                      : "<strong>Task (Blue / Red):</strong> perceive the environment as challenging/hostile and work hard to reshape it.<br><strong>People (Yellow / Green):</strong> perceive the environment as favorable and thrive through human relationships."
+                  }
+                </p>
+              </div>
+              <div class="p-3 rounded-xl bg-white border border-slate-200">
+                <div class="font-extrabold text-slate-900 mb-1">
+                  ${lang === 'fr' ? '2. Axe Horizontal : Observation / Action' : '2. Horizontal Axis: Reflection / Action'}
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  ${
+                    lang === 'fr'
+                      ? "<strong>Action (Rouge / Jaune) :</strong> se sentent plus forts que leur environnement (« J'agis puis je réfléchis »).<br><strong>Observation (Bleu / Vert) :</strong> privilégient la réflexion à l'action (« Je réfléchis puis j'agis »)."
+                      : "<strong>Action (Red / Yellow):</strong> feel stronger than their environment ('I act then think').<br><strong>Observation (Blue / Green):</strong> favor careful reflection over immediate action ('I think then act')."
+                  }
+                </p>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-white border border-slate-200">
+              <div class="font-extrabold text-slate-900 mb-1.5">
+                ${lang === 'fr' ? 'Le test de personnalité DISC permet de :' : 'The DISC assessment helps teams:'}
+              </div>
+              <div class="flex flex-wrap gap-1.5 text-xs font-semibold text-slate-700">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100">✓ ${lang === 'fr' ? 'Construire une équipe' : 'Build a balanced team'}</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100">✓ ${lang === 'fr' ? 'Intégrer aisément un collaborateur' : 'Onboard new collaborators smoothly'}</span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100">✓ ${lang === 'fr' ? 'Améliorer la cohésion & éviter les tensions' : 'Improve cohesion & prevent tension'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (activeProf) {
+        const badgesHtml = activeProf.badges[lang]
+          .map(
+            (b) =>
+              `<span class="px-2.5 py-0.5 rounded-lg bg-white/90 border border-black/10 text-[11px] font-bold text-slate-800 shadow-2xs">${b}</span>`
+          )
+          .join('');
+
+        rightColumnHtml = `
+          <div class="rounded-2xl border-2 p-4 sm:p-5 transition-all ${activeProf.lightBg}">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-extrabold uppercase tracking-wide ${activeProf.badgeBg}">
+                  ${activeProf.name[lang]} — ${activeProf.roleTitle[lang]}
+                </span>
+                ${
+                  domKeys.includes(activeProf.key)
+                    ?`<span class="px-2 py-0.5 rounded-md bg-slate-900 text-white text-[11px] font-bold">${
+                        lang === 'fr' ? 'Votre Dominante' : 'Your Dominant'
+                      }</span>`
+                    : ''
+                }
+                ${
+                  secKeys.includes(activeProf.key)
+                    ?`<span class="px-2 py-0.5 rounded-md bg-slate-700 text-white text-[11px] font-bold">${
+                        lang === 'fr' ? 'Votre Secondaire' : 'Your Secondary'
+                      }</span>`
+                    : ''
+                }
+              </div>
+              ${
+                scores && typeof scores[activeProf.key] === 'number'
+                  ? `<span class="text-sm sm:text-base font-black text-slate-900">${scores[activeProf.key]} / 25 <span class="text-xs font-normal text-slate-600">(${Math.round(
+                      (scores[activeProf.key] / 25) * 100
+                    )}%)</span></span>`
+                  : ''
+              }
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 mb-3">
+              ${badgesHtml}
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-800 leading-relaxed mb-3.5">
+              ${activeProf.pdfSummary[lang]}
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+              <div class="p-3 rounded-xl bg-white/90 border border-black/5">
+                <div class="font-extrabold flex items-center gap-1.5 mb-1 ${activeProf.textColor}">
+                  <span>⚡ ${lang === 'fr' ? 'Forces & Apports en équipe' : 'Strengths & Team Value'}</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">${activeProf.strengths[lang]}</p>
+              </div>
+              <div class="p-3 rounded-xl bg-white/90 border border-black/5">
+                <div class="font-extrabold flex items-center gap-1.5 mb-1 text-slate-800">
+                  <span>⚠️ ${lang === 'fr' ? 'Points de vigilance & Management' : 'Watch-outs & Management Tips'}</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">${activeProf.blindSpots[lang]}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+          <div class="px-4 py-3 sm:px-6 sm:py-3.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400 font-black">●</span>
+              <h3 class="text-sm sm:text-base font-extrabold tracking-tight">
+                ${lang === 'fr' ? 'Guide DISC : Explication détaillée des 4 couleurs' : 'DISC Guide: Detailed 4-Color Explanation'}
+              </h3>
+            </div>
+            <span class="text-[11px] text-slate-300 font-medium">
+              ${lang === 'fr' ? 'Touchez une couleur ou un quartier du disque pour lire sa fiche' : 'Tap any color or wheel quadrant to read its profile'}
+            </span>
+          </div>
+
+          <div class="px-3 pt-3 sm:px-6 sm:pt-4 flex flex-wrap items-center gap-1.5 border-b border-slate-100 pb-3">
+            ${colorPillsHtml}
+            ${methodPillHtml}
+          </div>
+
+          <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+            <!-- Left Column: Interactive 4-Quadrant DISC Circle -->
+            <div class="lg:col-span-6 flex flex-col items-center justify-center bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80">
+              <div class="text-center mb-1.5">
+                <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-700">
+                  ${lang === 'fr' ? '▲ Centré sur la Tâche' : '▲ Task-Focused'}
+                </div>
+                <div class="text-[10px] text-slate-500">
+                  ${lang === 'fr' ? 'Environnement considéré comme hostile' : 'Environment perceived as hostile'}
+                </div>
+              </div>
+
+              <!-- 4-Quadrant Wheel (fluid size: fills the column, max 22rem) -->
+              <div class="relative w-full max-w-[22rem] aspect-square rounded-full overflow-hidden border-4 border-white shadow-md grid grid-cols-2 grid-rows-2">
+                <!-- Top-Left: BLEU -->
+                <button
+                  type="button"
+                  onclick="window.app.setGuideTab('BLEU', '${modePrefix}')"
+                  class="relative flex flex-col items-end justify-end text-right pr-[9%] pb-[13%] transition-all cursor-pointer border-r border-b border-white/60 ${
+                    currentTab === 'BLEU'
+                      ? 'bg-blue-600 text-white ring-2 ring-inset ring-white'
+                      : 'bg-blue-500/85 hover:bg-blue-600 text-white'
+                  }"
+                >
+                  <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider opacity-90">${COLOR_PROFILES.BLEU.quadrantLabel[lang]}</span>
+                  <span class="text-sm sm:text-lg font-extrabold leading-tight">${COLOR_PROFILES.BLEU.name[lang]}</span>
+                  ${scores ? `<span class="mt-0.5 px-2 py-0.5 rounded-full bg-black/25 text-[10px] sm:text-xs font-bold">${scores.BLEU}/25</span>` : ''}
+                </button>
+
+                <!-- Top-Right: ROUGE -->
+                <button
+                  type="button"
+                  onclick="window.app.setGuideTab('ROUGE', '${modePrefix}')"
+                  class="relative flex flex-col items-start justify-end text-left pl-[9%] pb-[13%] transition-all cursor-pointer border-l border-b border-white/60 ${
+                    currentTab === 'ROUGE'
+                      ? 'bg-red-600 text-white ring-2 ring-inset ring-white'
+                      : 'bg-red-500/85 hover:bg-red-600 text-white'
+                  }"
+                >
+                  <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider opacity-90">${COLOR_PROFILES.ROUGE.quadrantLabel[lang]}</span>
+                  <span class="text-sm sm:text-lg font-extrabold leading-tight">${COLOR_PROFILES.ROUGE.name[lang]}</span>
+                  ${scores ? `<span class="mt-0.5 px-2 py-0.5 rounded-full bg-black/25 text-[10px] sm:text-xs font-bold">${scores.ROUGE}/25</span>` : ''}
+                </button>
+
+                <!-- Bottom-Left: VERT -->
+                <button
+                  type="button"
+                  onclick="window.app.setGuideTab('VERT', '${modePrefix}')"
+                  class="relative flex flex-col items-end justify-start text-right pr-[9%] pt-[13%] transition-all cursor-pointer border-r border-t border-white/60 ${
+                    currentTab === 'VERT'
+                      ? 'bg-green-600 text-white ring-2 ring-inset ring-white'
+                      : 'bg-green-500/85 hover:bg-green-600 text-white'
+                  }"
+                >
+                  <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider opacity-90">${COLOR_PROFILES.VERT.quadrantLabel[lang]}</span>
+                  <span class="text-sm sm:text-lg font-extrabold leading-tight">${COLOR_PROFILES.VERT.name[lang]}</span>
+                  ${scores ? `<span class="mt-0.5 px-2 py-0.5 rounded-full bg-black/25 text-[10px] sm:text-xs font-bold">${scores.VERT}/25</span>` : ''}
+                </button>
+
+                <!-- Bottom-Right: JAUNE -->
+                <button
+                  type="button"
+                  onclick="window.app.setGuideTab('JAUNE', '${modePrefix}')"
+                  class="relative flex flex-col items-start justify-start text-left pl-[9%] pt-[13%] transition-all cursor-pointer border-l border-t border-white/60 ${
+                    currentTab === 'JAUNE'
+                      ? 'bg-amber-400 text-slate-950 ring-2 ring-inset ring-white'
+                      : 'bg-amber-400/90 hover:bg-amber-400 text-slate-950'
+                  }"
+                >
+                  <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider opacity-85">${COLOR_PROFILES.JAUNE.quadrantLabel[lang]}</span>
+                  <span class="text-sm sm:text-lg font-extrabold leading-tight">${COLOR_PROFILES.JAUNE.name[lang]}</span>
+                  ${scores ? `<span class="mt-0.5 px-2 py-0.5 rounded-full bg-black/15 text-[10px] sm:text-xs font-bold">${scores.JAUNE}/25</span>` : ''}
+                </button>
+
+                <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+                  <span class="px-2 py-0.5 rounded-full bg-slate-900 text-white text-[10px] font-black tracking-widest shadow">
+                    DISC
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 w-full max-w-[22rem] mt-2 text-center leading-tight">
+                <div>
+                  <div class="text-[10px] font-extrabold uppercase text-slate-700">${lang === 'fr' ? '◀ Réflexion' : '◀ Reflection'}</div>
+                  <div class="text-[10px] text-slate-500">${lang === 'fr' ? 'Je réfléchis puis j’agis' : 'I think then act'}</div>
+                </div>
+                <div>
+                  <div class="text-[10px] font-extrabold uppercase text-slate-700">Action ▶</div>
+                  <div class="text-[10px] text-slate-500">${lang === 'fr' ? 'J’agis puis je réfléchis' : 'I act then think'}</div>
+                </div>
+              </div>
+
+              <div class="text-center mt-1.5">
+                <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-700">
+                  ${lang === 'fr' ? '▼ Centré sur l’Humain / Relation' : '▼ People / Relationship-Focused'}
+                </div>
+                <div class="text-[10px] text-slate-500">
+                  ${lang === 'fr' ? 'Environnement considéré comme favorable' : 'Environment perceived as favorable'}
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Active Color Details -->
+            <div class="lg:col-span-6">
+              ${rightColumnHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================
+    // 8. COMPONENT BUILDER: LIVE TEAM RESULTS SECTION
+    // =========================================================
+    function buildTeamSectionHtml() {
+      const lang = state.lang;
+      const counts = { BLEU: 0, ROUGE: 0, VERT: 0, JAUNE: 0 };
+      state.submissions.forEach((s) => {
+        // a tie counts for each tied color
+        getTopColors(s.scores).forEach((k) => {
+          if (counts[k] !== undefined) counts[k] += 1;
+        });
+      });
+
+      const summaryCardsHtml = COLOR_ORDER.map((cKey) => {
+        const c = COLOR_PROFILES[cKey];
+        return `
+          <div class="rounded-2xl border p-3.5 flex flex-col justify-between ${c.lightBg}">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full" style="background-color:${c.hex}"></span>
+              <span class="text-xs font-extrabold uppercase text-slate-800">${c.name[lang]} (${c.letter})</span>
+            </div>
+            <span class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">${counts[cKey]}</span>
+          </div>
+        `;
+      }).join('');
+
+      let rowsHtml = '';
+      if (state.submissions.length === 0) {
+        rowsHtml = `
+          <div class="p-10 text-center space-y-2">
+            <p class="text-sm font-bold text-slate-700">
+              ${
+                state.syncUrl && !state.teamLoaded
+                  ? lang === 'fr' ? 'Chargement des résultats…' : 'Loading results…'
+                  : lang === 'fr' ? 'Aucun résultat enregistré pour le moment.' : 'No team results recorded yet.'
+              }
+            </p>
+            <p class="text-xs text-slate-500">
+              ${
+                lang === 'fr'
+                  ? 'Dès qu’un membre termine les 25 questions, sa couleur dominante apparaît ici en direct.'
+                  : 'As soon as a team member completes the 25 questions, their dominant color appears here live.'
+              }
+            </p>
+          </div>
+        `;
+      } else {
+        const trs = state.submissions
+          .map((row) => {
+            const topKeys = getTopColors(row.scores);
+            const secKeys = getSecondColors(row.scores);
+            const b = row.scores?.BLEU ?? 0;
+            const r = row.scores?.ROUGE ?? 0;
+            const v = row.scores?.VERT ?? 0;
+            const j = row.scores?.JAUNE ?? 0;
+            const total = Math.max(b + r + v + j, 1);
+
+            return `
+              <tr class="hover:bg-slate-50/90 transition-colors">
+                <td class="py-3 px-4 font-bold text-slate-900">${escapeHtml(row.name)}</td>
+                <td class="py-3 px-3">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    ${topKeys
+                      .map(
+                        (k) =>
+                          `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${COLOR_PROFILES[k].badgeBg}">${COLOR_PROFILES[k].name[lang]} (${COLOR_PROFILES[k].letter})</span>`
+                      )
+                      .join('')}
+                    ${secKeys.length ? `<span class="text-xs text-slate-500 font-medium">+ ${colorLabel(secKeys, lang)}</span>` : ''}
+                  </div>
+                </td>
+                <td class="py-3 px-2 text-center font-bold text-red-700 bg-red-50/40">${r}</td>
+                <td class="py-3 px-2 text-center font-bold text-amber-700 bg-amber-50/40">${j}</td>
+                <td class="py-3 px-2 text-center font-bold text-green-700 bg-green-50/40">${v}</td>
+                <td class="py-3 px-2 text-center font-bold text-blue-700 bg-blue-50/40">${b}</td>
+                <td class="py-3 px-4 hidden sm:table-cell w-36">
+                  <div class="w-full h-2.5 rounded-full overflow-hidden flex bg-slate-100">
+                    <div class="bg-red-600 h-full" style="width:${(r / total) * 100}%"></div>
+                    <div class="bg-amber-400 h-full" style="width:${(j / total) * 100}%"></div>
+                    <div class="bg-green-600 h-full" style="width:${(v / total) * 100}%"></div>
+                    <div class="bg-blue-600 h-full" style="width:${(b / total) * 100}%"></div>
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <button
+                      type="button"
+                      onclick="window.app.openMemberModal('${row.id}')"
+                      class="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 cursor-pointer"
+                    >
+                      ${lang === 'fr' ? 'Profil' : 'View'}
+                    </button>
+                    ${
+                      !canAdmin()
+                        ? ''
+                        : state.confirmDeleteId === row.id
+                        ?`<button type="button" onclick="window.app.deleteSubmission('${row.id}')" class="px-2 py-1 rounded-lg bg-red-600 text-white text-xs font-bold cursor-pointer">${
+                            lang === 'fr' ? 'Confirmer' : 'Confirm'
+                          }</button>`
+                        : `<button type="button" onclick="window.app.askDeleteSubmission('${row.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 cursor-pointer" title="Supprimer">✕</button>`
+                    }
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        rowsHtml = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+                  <th class="py-3 px-4">${lang === 'fr' ? 'Participant' : 'Participant'}</th>
+                  <th class="py-3 px-3">${lang === 'fr' ? 'Couleur Dominante' : 'Dominant Color'}</th>
+                  <th class="py-3 px-2 text-center text-red-600">${lang === 'fr' ? 'Rouge' : 'Red'}</th>
+                  <th class="py-3 px-2 text-center text-amber-600">${lang === 'fr' ? 'Jaune' : 'Yellow'}</th>
+                  <th class="py-3 px-2 text-center text-green-600">${lang === 'fr' ? 'Vert' : 'Green'}</th>
+                  <th class="py-3 px-2 text-center text-blue-600">${lang === 'fr' ? 'Bleu' : 'Blue'}</th>
+                  <th class="py-3 px-4 hidden sm:table-cell">${lang === 'fr' ? 'Répartition' : 'Breakdown'}</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-xs sm:text-sm">
+                ${trs}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+            <div class="col-span-2 sm:col-span-1 bg-slate-900 text-white rounded-2xl p-3.5 flex flex-col justify-between">
+              <span class="text-[11px] font-semibold text-slate-300 uppercase">${lang === 'fr' ? 'Total Équipe' : 'Total Team'}</span>
+              <span class="text-2xl sm:text-3xl font-extrabold mt-0.5">${state.submissions.length}</span>
+            </div>
+            ${summaryCardsHtml}
+          </div>
+
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900">
+                  ${lang === 'fr' ? 'Résultats de toute l’équipe en direct' : 'Live Team Results'}
+                </h2>
+                <p class="text-xs text-slate-500">
+                  ${
+                    !canAdmin()
+                      ? lang === 'fr'
+                        ? 'Les résultats se mettent à jour automatiquement. Le téléchargement est réservé à l’animateur.'
+                        : 'Results update automatically. Downloading is reserved for the facilitator.'
+                      : lang === 'fr'
+                      ? 'Exportez le tableau complet avec les réponses Q1 à Q25 et les scores couleurs vers Excel.'
+                      : 'Export the complete table with Q1–Q25 answers and final color scores to Excel.'
+                  }
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                ${canAdmin() ? `<button
+                  type="button"
+                  onclick="window.app.exportExcelAll()"
+                  ${state.submissions.length === 0 && !state.myResult ? 'disabled' : ''}
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+                >
+                  <span>📊 ${lang === 'fr' ? 'Exporter Excel (.xls avec Q1–Q25)' : 'Export Excel (.xls with Q1–Q25)'}</span>
+                </button>
+                <button
+                  type="button"
+                  onclick="window.app.exportCSVAll()"
+                  ${state.submissions.length === 0 && !state.myResult ? 'disabled' : ''}
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 text-white text-xs font-bold cursor-pointer"
+                >
+                  <span>CSV</span>
+                </button>` : ''}
+                ${
+                  state.syncUrl
+                    ? `<button type="button" onclick="window.app.refreshTeam()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold cursor-pointer">↻ ${lang === 'fr' ? 'Actualiser' : 'Refresh'}</button>`
+                    : ''
+                }
+                ${
+                  state.syncUrl && state.adminKey
+                    ? `<button type="button" onclick="window.app.lockTeam()" title="${lang === 'fr' ? 'Quitter le mode animateur' : 'Leave facilitator mode'}" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold cursor-pointer">🔒 ${lang === 'fr' ? 'Animateur : actif' : 'Facilitator: on'}</button>`
+                    : ''
+                }
+                ${
+                  state.syncUrl && !state.adminKey
+                    ? `<div class="flex items-center gap-1.5">
+                         <input id="admin-key-input" type="password" autocomplete="off"
+                           onkeydown="if(event.key==='Enter') window.app.unlockTeam()"
+                           placeholder="🔒 ${lang === 'fr' ? 'Clé animateur' : 'Facilitator key'}"
+                           class="w-32 px-2.5 py-2 rounded-xl border ${state.teamError === 'key' ? 'border-red-500' : 'border-slate-300'} text-xs outline-none focus:border-slate-900" />
+                         <button type="button" onclick="window.app.unlockTeam()" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">OK</button>
+                       </div>`
+                    : ''
+                }
+              </div>
+            </div>
+            ${rowsHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================
+    // 9. MAIN RENDER FUNCTION
+    // =========================================================
+    function updateHeaderCounts() {
+      const lang = state.lang;
+      document.getElementById('nav-quiz-label').textContent = lang === 'fr' ? 'Questionnaire' : 'Questionnaire';
+      document.getElementById('nav-team-label').textContent = lang === 'fr' ? 'Équipe' : 'Team';
+      document.getElementById('nav-team-count').textContent = canSeeTeam() ? String(state.submissions.length) : '🔒';
+
+      const quizBtn = document.getElementById('tab-btn-quiz');
+      const teamBtn = document.getElementById('tab-btn-team');
+      if (state.mainTab === 'quiz') {
+        quizBtn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm';
+        teamBtn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5';
+      } else {
+        teamBtn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm flex items-center gap-1.5';
+        quizBtn.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900';
+      }
+
+      document.getElementById('lang-btn-fr').className =
+        lang === 'fr'
+          ? 'px-2 py-1 rounded-lg text-xs font-extrabold transition-all bg-slate-900 text-white'
+          : 'px-2 py-1 rounded-lg text-xs font-extrabold transition-all text-slate-500 hover:text-slate-900';
+      document.getElementById('lang-btn-en').className =
+        lang === 'en'
+          ? 'px-2 py-1 rounded-lg text-xs font-extrabold transition-all bg-slate-900 text-white'
+          : 'px-2 py-1 rounded-lg text-xs font-extrabold transition-all text-slate-500 hover:text-slate-900';
+
+      updateSyncBadge();
+    }
+
+    function updateSyncBadge() {
+      const txtEl = document.getElementById('sync-status-text');
+      if (!txtEl) return;
+      if (state.syncUrl) {
+        txtEl.textContent = state.lang === 'fr' ? 'Résultats envoyés à l’animateur' : 'Results sent to the facilitator';
+      } else {
+        txtEl.textContent = state.lang === 'fr' ? 'Mode local (cet appareil seulement)' : 'Local mode (this device only)';
+      }
+    }
+
+    let animateNext = true; // set to false for re-renders that should not replay the fade-in
+
+    function render() {
+      updateHeaderCounts();
+      const root = document.getElementById('app-root');
+      const fadeCls = animateNext ? 'animate-fade-in' : '';
+      animateNext = true;
+      const lang = state.lang;
+
+      if (state.mainTab === 'team') {
+        if (!canSeeTeam()) {
+          root.innerHTML = `<div class="${fadeCls}">${buildTeamLockHtml()}</div>`;
+          return;
+        }
+        root.innerHTML = `
+          <div class="space-y-6 ${fadeCls}">
+            ${buildTeamSectionHtml()}
+            ${buildDISCGuideHtml(null, null, null, state.guideTab, 'main')}
+          </div>
+        `;
+        return;
+      }
+
+      // TAB 1: QUESTIONNAIRE FLOW
+      if (state.stage === 'start') {
+        const previewCards = COLOR_ORDER.map((cKey) => {
+          const c = COLOR_PROFILES[cKey];
+          return `
+            <div class="rounded-xl border px-3 py-2 flex items-center gap-2 ${c.lightBg}">
+              <span class="w-3 h-3 rounded-full shrink-0" style="background-color:${c.hex}"></span>
+              <div class="min-w-0">
+                <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-tight">${c.name[lang]} (${c.letter})</div>
+                <div class="text-[11px] text-slate-600 leading-tight">${c.roleTitle[lang]}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        root.innerHTML = `
+          <div class="max-w-2xl mx-auto bg-white rounded-3xl border border-slate-200 shadow-xs p-5 sm:p-8 ${fadeCls}">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold mb-3">
+              <span>25 Questions</span>
+              <span>•</span>
+              <span>~3 min</span>
+              <span>•</span>
+              <span>FR / EN</span>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">
+              ${lang === 'fr' ? 'Test de personnalité DISC aux 4 couleurs' : 'DISC 4-Color Personality Assessment'}
+            </h2>
+            <p class="text-slate-600 text-xs sm:text-sm mb-5 leading-relaxed">
+              ${
+                lang === 'fr'
+                  ? 'Pour chaque situation, touchez la réponse (a, b, c ou d) qui vous correspond le plus naturellement. À la fin, vous découvrirez l’explication complète de votre couleur ainsi que les résultats de toute l’équipe.'
+                  : 'For each situation, tap the option (a, b, c, or d) that best describes you. At the end, you will unlock your complete color profile explanation and see the live team results.'
+              }
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+              ${previewCards}
+            </div>
+
+            <div class="space-y-3.5">
+              <div>
+                <label class="block text-xs sm:text-sm font-bold text-slate-800 mb-1">
+                  ${lang === 'fr' ? 'Votre prénom et nom' : 'Your Full Name'}
+                </label>
+                <input
+                  id="participant-name-input"
+                  type="text"
+                  value="${escapeHtml(state.name)}"
+                  oninput="window.app.updateName(this.value)"
+                  onkeydown="if(event.key==='Enter') window.app.startQuestions()"
+                  placeholder="${lang === 'fr' ? 'Ex. Marie Tremblay' : 'e.g. Alex Johnson'}"
+                  class="w-full px-4 py-3 rounded-xl border text-sm sm:text-base font-medium outline-none transition-all ${
+                    state.nameError
+                      ? 'border-red-500 bg-red-50 focus:ring-2 focus:ring-red-300'
+                      : 'border-slate-300 bg-white focus:border-slate-900 focus:ring-2 focus:ring-slate-200'
+                  }"
+                />
+                ${
+                  state.nameError
+                    ? `<p class="text-xs font-semibold text-red-600 mt-1">${
+                        lang === 'fr' ? 'Veuillez entrer votre nom avant de commencer.' : 'Please enter your name before starting.'
+                      }</p>`
+                    : ''
+                }
+              </div>
+
+              <button
+                type="button"
+                onclick="window.app.startQuestions()"
+                class="w-full py-3.5 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-bold text-sm sm:text-base shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <span>${lang === 'fr' ? 'Commencer le questionnaire →' : 'Start Questionnaire →'}</span>
+              </button>
+
+              <div class="pt-2 border-t border-slate-100 flex justify-center">
+                <button
+                  type="button"
+                  onclick="window.app.startQuickGrid()"
+                  class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 py-1 px-2 rounded-lg transition-colors cursor-pointer"
+                >
+                  <span>${
+                    lang === 'fr'
+                      ? 'Déjà répondu sur papier ? Saisie rapide (a, b, c, d)'
+                      : 'Already answered on paper? Quick Entry (a, b, c, d)'
+                  }</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.stage === 'questions') {
+        const qObj = QUESTIONS[state.currentQ];
+        const answeredCount = Object.keys(state.answers).length;
+
+        const optionsHtml = ['a', 'b', 'c', 'd']
+          .map((letter) => {
+            const isSelected = state.answers[qObj.id] === letter;
+            return `
+              <button
+                type="button"
+                onclick="window.app.selectOption('${letter}')"
+                class="w-full text-left p-3 sm:p-4 rounded-2xl border-2 transition-all flex items-start gap-3 cursor-pointer ${
+                  isSelected
+                    ? 'border-slate-900 bg-slate-900 text-white shadow-sm'
+                    : 'border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 text-slate-800'
+                }"
+              >
+                <span class="w-7 h-7 rounded-xl font-extrabold text-xs uppercase flex items-center justify-center shrink-0 mt-0.5 ${
+                  isSelected ? 'bg-white text-slate-900' : 'bg-slate-100 text-slate-700'
+                }">
+                  ${letter}
+                </span>
+                <span class="text-sm sm:text-base font-medium leading-snug">
+                  ${escapeHtml(qObj.options[letter][lang])}
+                </span>
+              </button>
+            `;
+          })
+          .join('');
+
+        // Mini 1..25 pill strip for quick jumping
+        const dotsHtml = QUESTIONS.map((item, idx) => {
+          const done = Boolean(state.answers[item.id]);
+          const isCurr = idx === state.currentQ;
+          return `
+            <button
+              type="button"
+              onclick="window.app.jumpToQuestion(${idx})"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-[11px] sm:text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                isCurr
+                  ? 'bg-slate-900 text-white ring-2 ring-slate-400'
+                  : done
+                  ? 'bg-emerald-100 text-emerald-800'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+              }"
+            >
+              ${item.id}
+            </button>
+          `;
+        }).join('');
+
+        root.innerHTML = `
+          <div class="max-w-2xl mx-auto bg-white rounded-3xl border border-slate-200 shadow-xs p-4 sm:p-7 ${fadeCls}">
+            <div class="mb-3">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-600 mb-1.5">
+                <span>Question ${state.currentQ + 1} / ${QUESTIONS.length}</span>
+                <span class="text-slate-500 truncate max-w-[180px]">${escapeHtml(state.name)}</span>
+              </div>
+              <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-900 rounded-full transition-all duration-300" style="width:${((state.currentQ + 1) / QUESTIONS.length) * 100}%"></div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-1.5 py-2 mb-3 border-b border-slate-100">
+              ${dotsHtml}
+            </div>
+
+            <h3 class="text-base sm:text-xl font-extrabold text-slate-900 mb-4 leading-snug">
+              <span class="text-slate-400 mr-1.5">${qObj.id}.</span>${escapeHtml(qObj[lang])}
+            </h3>
+
+            <div class="space-y-2.5">
+              ${optionsHtml}
+            </div>
+
+            <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <button
+                type="button"
+                onclick="window.app.prevQuestion()"
+                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <span>← ${lang === 'fr' ? 'Précédent' : 'Previous'}</span>
+              </button>
+
+              <div class="text-[11px] text-slate-400 font-semibold">
+                ${answeredCount} / 25
+              </div>
+
+              ${
+                answeredCount === 25
+                  ? `<button type="button" onclick="window.app.finishQuiz()" class="px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer">${
+                      lang === 'fr' ? 'Voir mon résultat ✓' : 'See My Result ✓'
+                    }</button>`
+                  : state.answers[qObj.id] && state.currentQ < QUESTIONS.length - 1
+                  ? `<button type="button" onclick="window.app.nextQuestion()" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-900 cursor-pointer">${
+                      lang === 'fr' ? 'Suivant →' : 'Next →'
+                    }</button>`
+                  : `<span class="w-16"></span>`
+              }
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.stage === 'quickGrid') {
+        const answeredCount = Object.keys(state.answers).length;
+        const cellsHtml = QUESTIONS.map((q) => {
+          const btns = ['a', 'b', 'c', 'd']
+            .map((letter) => {
+              const active = state.answers[q.id] === letter;
+              return `
+                <button
+                  type="button"
+                  onclick="window.app.setQuickGridAnswer(${q.id}, '${letter}')"
+                  class="w-8 h-8 rounded-lg font-bold text-xs uppercase transition-all cursor-pointer ${
+                    active
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'bg-white border border-slate-200 text-slate-700 hover:border-slate-400'
+                  }"
+                >
+                  ${letter}
+                </button>
+              `;
+            })
+            .join('');
+
+          return `
+            <div class="flex items-center justify-between p-2 rounded-xl border border-slate-200 bg-slate-50">
+              <span class="text-xs font-bold text-slate-700 w-8">Q${q.id}.</span>
+              <div class="flex items-center gap-1">${btns}</div>
+            </div>
+          `;
+        }).join('');
+
+        root.innerHTML = `
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-4 sm:p-7 ${fadeCls}">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 class="text-lg font-extrabold text-slate-900">
+                  ${lang === 'fr' ? 'Saisie rapide des 25 réponses' : 'Quick 25-Answer Entry'}
+                </h3>
+                <p class="text-xs text-slate-500">
+                  ${escapeHtml(state.name)} — ${lang === 'fr' ? 'Sélectionnez a, b, c ou d pour chaque question.' : 'Tap a, b, c, or d for each question.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="window.app.backToStart()"
+                class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg bg-slate-100 cursor-pointer"
+              >
+                ← ${lang === 'fr' ? 'Retour' : 'Back'}
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 my-4">
+              ${cellsHtml}
+            </div>
+
+            <button
+              type="button"
+              ${answeredCount < 25 ? 'disabled' : ''}
+              onclick="window.app.finishQuiz()"
+              class="w-full py-3.5 px-6 rounded-2xl bg-slate-900 disabled:bg-slate-300 text-white font-bold text-sm sm:text-base shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>${
+                lang === 'fr'
+                  ? `Calculer mon profil couleur (${answeredCount}/25 réponses)`
+                  : `Calculate My Color Profile (${answeredCount}/25 answered)`
+              }</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.stage === 'done' && state.myResult) {
+        const res = state.myResult;
+        const topSet = getTopColors(res.scores);
+        const scoreCardsHtml = res.sortedColors
+          .map((cKey, idx) => {
+            const c = COLOR_PROFILES[cKey];
+            const count = res.scores[cKey] || 0;
+            const pct = Math.round((count / 25) * 100);
+            return `
+              <div class="rounded-2xl border p-3 ${
+                topSet.includes(cKey) ? `${c.lightBg} ring-2 ring-slate-900/10` : 'bg-slate-50 border-slate-200'
+              }">
+                <div class="flex items-center justify-between text-xs font-bold mb-1">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full" style="background-color:${c.hex}"></span>
+                    <span class="text-slate-900">${c.name[lang]} (${c.letter})</span>
+                  </span>
+                  ${topSet.includes(cKey) ? `<span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-900 text-white font-black">#1</span>` : ''}
+                </div>
+                <div class="flex items-baseline justify-between mb-1.5">
+                  <span class="text-lg sm:text-xl font-black text-slate-900">
+                    ${count}<span class="text-xs font-normal text-slate-500">/25</span>
+                  </span>
+                  <span class="text-xs font-bold text-slate-600">${pct}%</span>
+                </div>
+                <div class="w-full h-2 bg-white rounded-full overflow-hidden border border-black/5">
+                  <div class="h-full rounded-full ${c.barColor}" style="width:${Math.max(pct, 4)}%"></div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
+        root.innerHTML = `
+          <div class="space-y-6 ${fadeCls}">
+            <!-- 1. Personal Score Summary Card -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-4 sm:p-6">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+                    ✓ ${lang === 'fr' ? 'Profil calculé' : 'Profile Calculated'}
+                  </span>
+                  <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900">${escapeHtml(res.name)}</h2>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  ${state.syncUrl ? '' : `<button
+                    type="button"
+                    onclick="window.app.exportExcelSingle()"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
+                  >
+                    <span>📊 ${lang === 'fr' ? 'Mon Excel (Q1–Q25)' : 'My Excel (Q1–Q25)'}</span>
+                  </button>`}
+                  <button
+                    type="button"
+                    onclick="window.app.resetQuiz()"
+                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold cursor-pointer"
+                  >
+                    <span>↺ ${lang === 'fr' ? 'Nouveau test' : 'New Test'}</span>
+                  </button>
+                </div>
+              </div>
+
+              ${buildSendStatusHtml()}
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                ${scoreCardsHtml}
+              </div>
+              ${buildTieNoticeHtml(res.scores)}
+            </div>
+
+            <!-- 2. Detailed DISC Color Guide & Interactive 4-Quadrant Wheel -->
+            ${buildDISCGuideHtml(res.scores, res.dominantColor, res.secondaryColor, state.guideTab, 'main')}
+
+            <!-- 3. Team results table (hidden from participants in shared mode) -->
+            ${canSeeTeam() ? buildTeamSectionHtml() : ''}
+          </div>
+        `;
+      }
+    }
+
+    // =========================================================
+    // 10. EXCEL (.XLS) & CSV EXPORT (Includes Q1-Q25 + Final Scores)
+    // =========================================================
+    function exportExcelRows(rowsToExport, filenamePrefix = 'DISC_Resultats_Equipe') {
+      if (!rowsToExport || rowsToExport.length === 0) return;
+      const lang = state.lang;
+
+      const qHeaders = Array.from(
+        { length: 25 },
+        (_, i) =>
+          `<th style="background:#1e293b;color:#ffffff;padding:6px 8px;border:1px solid #cbd5e1;">Q${i + 1}</th>`
+      ).join('');
+
+      const bodyRows = rowsToExport
+        .map((s) => {
+          const ansObj = parseAnswers(s.answers);
+          const topKeys = getTopColors(s.scores);
+          const secKeys = getSecondColors(s.scores);
+          const domProf = COLOR_PROFILES[topKeys[0]];
+          const b = s.scores?.BLEU ?? 0;
+          const r = s.scores?.ROUGE ?? 0;
+          const v = s.scores?.VERT ?? 0;
+          const j = s.scores?.JAUNE ?? 0;
+          const dateStr = s.createdAt ? new Date(s.createdAt).toLocaleString() : '';
+
+          const qCells = Array.from({ length: 25 }, (_, i) => {
+            const letter = String(ansObj[i + 1] || '').toUpperCase();
+            return `<td style="text-align:center;font-weight:bold;padding:6px;border:1px solid #cbd5e1;">${letter}</td>`;
+          }).join('');
+
+          return `
+            <tr>
+              <td style="font-weight:bold;padding:6px 10px;border:1px solid #cbd5e1;">${escapeHtml(s.name)}</td>
+              <td style="font-weight:bold;padding:6px 10px;border:1px solid #cbd5e1;background:${domProf.hex};color:${
+            topKeys[0] === 'JAUNE' ? '#0f172a' : '#ffffff'
+          };text-align:center;">
+                ${colorLabel(topKeys, lang, true)}
+              </td>
+              <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;">
+                ${secKeys.length ? colorLabel(secKeys, lang, true) : '-'}
+              </td>
+              <td style="text-align:center;font-weight:bold;background:#fef2f2;color:#b91c1c;padding:6px;border:1px solid #cbd5e1;">${r}</td>
+              <td style="text-align:center;font-weight:bold;background:#fefce8;color:#a16207;padding:6px;border:1px solid #cbd5e1;">${j}</td>
+              <td style="text-align:center;font-weight:bold;background:#f0fdf4;color:#15803d;padding:6px;border:1px solid #cbd5e1;">${v}</td>
+              <td style="text-align:center;font-weight:bold;background:#eff6ff;color:#1d4ed8;padding:6px;border:1px solid #cbd5e1;">${b}</td>
+              ${qCells}
+              <td style="padding:6px 8px;border:1px solid #cbd5e1;color:#64748b;">${dateStr}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      const htmlExcel = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta charset="UTF-8" />
+          <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Resultats DISC</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        </head>
+        <body>
+          <h2 style="font-family:Arial,sans-serif;">DISC Leadership — ${
+            lang === 'fr' ? 'Résultats finaux & Réponses (Q1 à Q25)' : 'Final Results & Answers (Q1 to Q25)'
+          }</h2>
+          <table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">
+            <thead>
+              <tr>
+                <th style="background:#0f172a;color:#ffffff;padding:8px 12px;border:1px solid #cbd5e1;">Participant</th>
+                <th style="background:#0f172a;color:#ffffff;padding:8px 12px;border:1px solid #cbd5e1;">${
+                  lang === 'fr' ? 'Couleur Dominante' : 'Dominant Color'
+                }</th>
+                <th style="background:#0f172a;color:#ffffff;padding:8px 12px;border:1px solid #cbd5e1;">${
+                  lang === 'fr' ? 'Couleur Secondaire' : 'Secondary Color'
+                }</th>
+                <th style="background:#dc2626;color:#ffffff;padding:8px 10px;border:1px solid #cbd5e1;">ROUGE (D) /25</th>
+                <th style="background:#eab308;color:#0f172a;padding:8px 10px;border:1px solid #cbd5e1;">JAUNE (I) /25</th>
+                <th style="background:#16a34a;color:#ffffff;padding:8px 10px;border:1px solid #cbd5e1;">VERT (S) /25</th>
+                <th style="background:#2563eb;color:#ffffff;padding:8px 10px;border:1px solid #cbd5e1;">BLEU (C) /25</th>
+                ${qHeaders}
+                <th style="background:#0f172a;color:#ffffff;padding:8px 10px;border:1px solid #cbd5e1;">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${bodyRows}
+            </tbody>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\uFEFF' + htmlExcel], {
+        type: 'application/vnd.ms-excel;charset=utf-8;'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filenamePrefix}_${new Date().toISOString().slice(0, 10)}.xls`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 1500);
+    }
+
+    // =========================================================
+    // 11. PUBLIC CONTROLLER METHODS (Exposed on window.app)
+    // =========================================================
+    window.app = {
+      setLanguage(newLang) {
+        state.lang = newLang;
+        render();
+        if (state.inspectingMember) {
+          this.renderMemberModalContent();
+        }
+      },
+
+      switchMainTab(tab) {
+        state.mainTab = tab;
+        render();
+      },
+
+      updateName(val) {
+        state.name = val;
+        if (state.nameError && val.trim()) {
+          state.nameError = false;
+          render();
+          const input = document.getElementById('participant-name-input');
+          if (input) {
+            input.focus();
+            input.setSelectionRange(val.length, val.length);
+          }
+        }
+      },
+
+      startQuestions() {
+        if (!state.name.trim()) {
+          state.nameError = true;
+          render();
+          return;
+        }
+        state.currentQ = 0;
+        state.stage = 'questions';
+        render();
+      },
+
+      startQuickGrid() {
+        if (!state.name.trim()) {
+          state.nameError = true;
+          render();
+          return;
+        }
+        state.stage = 'quickGrid';
+        render();
+      },
+
+      backToStart() {
+        state.stage = 'start';
+        render();
+      },
+
+      selectOption(letter) {
+        const qId = QUESTIONS[state.currentQ].id;
+        state.answers[qId] = letter;
+        animateNext = false; // just highlight the choice, no flicker
+        render();
+
+        setTimeout(() => {
+          if (state.stage !== 'questions') return;
+          if (state.currentQ < QUESTIONS.length - 1) {
+            state.currentQ += 1;
+            render();
+            if (window.scrollY > 60) window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            // last question: finish only if all 25 are answered, else go to the first gap
+            this.finishQuiz();
+          }
+        }, 280);
+      },
+
+      prevQuestion() {
+        if (state.currentQ > 0) {
+          state.currentQ -= 1;
+        } else {
+          state.stage = 'start';
+        }
+        render();
+      },
+
+      nextQuestion() {
+        if (state.currentQ < QUESTIONS.length - 1) {
+          state.currentQ += 1;
+          render();
+        }
+      },
+
+      jumpToQuestion(idx) {
+        state.currentQ = idx;
+        render();
+      },
+
+      setQuickGridAnswer(qId, letter) {
+        state.answers[qId] = letter;
+        animateNext = false;
+        render();
+      },
+
+      async finishQuiz() {
+        if (state.stage === 'done') return; // prevents double submission
+        // All 25 answers are required so the 4 totals always add up to 25
+        const missing = QUESTIONS.findIndex((q) => !state.answers[q.id]);
+        if (missing !== -1) {
+          if (state.stage === 'questions') {
+            state.currentQ = missing;
+            render();
+          }
+          return;
+        }
+
+        const cleanName = state.name.trim() || 'Participant';
+        const evaluation = evaluateDISC(state.answers);
+        const record = {
+          id: 'local-' + Date.now(),
+          name: cleanName,
+          scores: evaluation.scores,
+          dominantColor: evaluation.dominantColor,
+          secondaryColor: evaluation.secondaryColor,
+          sortedColors: evaluation.sortedColors,
+          answers: JSON.stringify(state.answers),
+          createdAt: Date.now()
+        };
+
+        state.myResult = record;
+        state.guideTab = evaluation.dominantColor;
+        state.stage = 'done';
+        state.sendStatus = '';
+
+        if (state.syncUrl) {
+          // Shared mode: send to the facilitator's Google Sheet (private)
+          sendRecord(record);
+        } else {
+          // Local mode: this device only
+          state.submissions = [record, ...state.submissions];
+          render();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      resetQuiz() {
+        state.name = '';
+        state.answers = {};
+        state.currentQ = 0;
+        state.myResult = null;
+        state.sendStatus = '';
+        state.stage = 'start';
+        render();
+      },
+
+      setGuideTab(tabKey, modePrefix = 'main') {
+        if (modePrefix === 'modal') {
+          state.modalGuideTab = tabKey;
+          this.renderMemberModalContent();
+        } else {
+          state.guideTab = tabKey;
+          render();
+        }
+      },
+
+      openMemberModal(rowId) {
+        const found = state.submissions.find((s) => s.id === rowId);
+        if (!found) return;
+        state.inspectingMember = found;
+        state.modalGuideTab = found.dominantColor || 'ROUGE';
+        const modal = document.getElementById('member-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        this.renderMemberModalContent();
+      },
+
+      renderMemberModalContent() {
+        const m = state.inspectingMember;
+        if (!m) return;
+        document.getElementById('modal-member-name').textContent = m.name;
+        document.getElementById('modal-member-subtitle').textContent =
+          state.lang === 'fr' ? 'Profil DISC détaillé' : 'Detailed DISC Profile';
+        document.getElementById('modal-member-excel-btn').style.display = canAdmin() ? '' : 'none';
+        document.getElementById('modal-member-excel-btn').onclick = () => {
+          exportExcelRows([m], `DISC_${(m.name || 'Participant').replace(/\s+/g, '_')}`);
+        };
+        document.getElementById('modal-member-body').innerHTML = buildDISCGuideHtml(
+          m.scores,
+          m.dominantColor,
+          m.secondaryColor,
+          state.modalGuideTab,
+          'modal'
+        );
+      },
+
+      closeMemberModal() {
+        state.inspectingMember = null;
+        const modal = document.getElementById('member-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      },
+
+      askDeleteSubmission(rowId) {
+        state.confirmDeleteId = rowId;
+        render();
+      },
+
+      async deleteSubmission(rowId) {
+        state.confirmDeleteId = null;
+        state.submissions = state.submissions.filter((s) => s.id !== rowId);
+        render();
+        // Protected mode: the server checks the facilitator key before deleting
+        if (state.syncUrl && state.adminKey && !String(rowId).startsWith('sheet-')) {
+          try {
+            await fetch(state.syncUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ action: 'delete', key: state.adminKey, id: rowId })
+            });
+          } catch (e) {
+            console.warn('Delete error:', e);
+          }
+          setTimeout(loadTeamFromSheet, 1500);
+        }
+      },
+
+      exportExcelAll() {
+        const list =
+          state.submissions.length > 0
+            ? state.submissions
+            : state.myResult
+            ? [state.myResult]
+            : [];
+        exportExcelRows(list, 'DISC_Resultats_Equipe_Complet');
+      },
+
+      exportExcelSingle() {
+        if (!state.myResult) return;
+        exportExcelRows([state.myResult], `DISC_${state.myResult.name.replace(/\s+/g, '_')}`);
+      },
+
+      exportCSVAll() {
+        const rowsToExport =
+          state.submissions.length > 0
+            ? state.submissions
+            : state.myResult
+            ? [state.myResult]
+            : [];
+        if (rowsToExport.length === 0) return;
+
+        const lang = state.lang;
+        const qCols = Array.from({ length: 25 }, (_, i) => `Q${i + 1}`);
+        const headers = [
+          'Name',
+          'Dominant_Color',
+          'Secondary_Color',
+          'ROUGE_D',
+          'JAUNE_I',
+          'VERT_S',
+          'BLEU_C',
+          ...qCols,
+          'Date'
+        ];
+
+        const csvRows = rowsToExport.map((s) => {
+          const ansObj = parseAnswers(s.answers);
+          const domName = colorLabel(getTopColors(s.scores), lang);
+          const secKeysCsv = getSecondColors(s.scores);
+          const secName = secKeysCsv.length ? colorLabel(secKeysCsv, lang) : '-';
+          const qVals = Array.from({ length: 25 }, (_, i) =>
+            String(ansObj[i + 1] || '').toUpperCase()
+          );
+          const dateStr = s.createdAt ? new Date(s.createdAt).toLocaleString() : '';
+
+          return [
+            `"${String(s.name || '').replace(/"/g, '""')}"`,
+            domName,
+            secName,
+            s.scores?.ROUGE ?? 0,
+            s.scores?.JAUNE ?? 0,
+            s.scores?.VERT ?? 0,
+            s.scores?.BLEU ?? 0,
+            ...qVals,
+            `"${dateStr}"`
+          ].join(',');
+        });
+
+        const csv = '\uFEFF' + [headers.join(','), ...csvRows].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `DISC_Results_Q1_Q25_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 1500);
+      },
+
+      unlockTeam() {
+        const input = document.getElementById('admin-key-input');
+        const key = input ? input.value.trim() : '';
+        if (!key) return;
+        // do NOT switch anything on yet: ask Google first
+        state.teamError = '';
+        loadTeamFromSheet(key);
+      },
+
+      lockTeam() {
+        // leave facilitator mode but KEEP the list on screen, then refresh it quietly
+        state.adminKey = '';
+        state.teamError = '';
+        try { sessionStorage.removeItem('disc_admin_key'); } catch (e) {}
+        animateNext = false;
+        render();
+        loadTeamFromSheet();
+      },
+
+      refreshTeam() {
+        loadTeamFromSheet();
+      },
+
+      retrySend() {
+        if (state.myResult && state.syncUrl) sendRecord(state.myResult);
+      }
+    };
+
+    // Start app immediately on load
+    render();
+    initCloudSync();
+  </script>
+</body>
+</html>
